@@ -2,6 +2,9 @@ HELP.md
 .gradle
 build/
 .DC_Store
+.AppleDouble
+.LSOverride
+._*
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
@@ -36,3 +39,4 @@ out/
 
 ### VS Code ###
 .vscode/
+
