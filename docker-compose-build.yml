@@ -1,6 +1,6 @@
 include:
   - docker-compose-infrastructure.yml
-  - docker-compose-keycloack.yml
+  - docker-compose-keycloak.yml
 services:
   # ============ACCOUNT==========
   account:

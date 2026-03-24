@@ -1,4 +1,4 @@
-CREATE DATABASE keycloaсk_db;
+CREATE DATABASE keycloak_db;
 CREATE DATABASE account_db;
 CREATE DATABASE crm_db;
 CREATE DATABASE shop_db;

@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import styles from '@/shared/ui/header//Header.module.css';
-import {ProfileNav} from "@/shared/ui/header/ProfileNav";
+import styles from '@/shared/shop/ui/header/Header.module.css';
+import {ProfileNav} from "@/shared/shop/ui/header/ProfileNav";
 
 export default function Header() {
 

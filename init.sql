@@ -1,2 +1,0 @@
-CREATE DATABASE frontend_db;
-CREATE DATABASE crm_db;
