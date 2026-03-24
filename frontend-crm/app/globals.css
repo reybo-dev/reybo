@@ -24,3 +24,36 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+@font-face {
+  font-family: 'Arsenal_SC';
+  src: url('/shared-temp/fonts/Arsenal_SC/ArsenalSC-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Arsenal_SC';
+  src: url('/shared-temp/fonts/Arsenal_SC/ArsenalSC-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+body {
+  font-family: 'Arsenal_SC', sans-serif;
+}
+
+
+
+
+
+
+

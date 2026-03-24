@@ -1,0 +1,8 @@
+yarn create next-app frontend-shop
+yarn create next-app frontend-crm
+
+npx create-next-app@latest frontend-shop
+
+npx и yarn отличаются производительностью, 
+
+yarn более производительный, но могут быть проблемы с поддержкой некоторый зависимостей, особенно старых версий

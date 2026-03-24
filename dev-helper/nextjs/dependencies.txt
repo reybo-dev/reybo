@@ -1,0 +1,25 @@
+yarn add keycloak-js
+yarn add axios
+
+// более удобная работа с cookie
+yarn add js-cookie
+yarn add -D @types/js-cookie
+
+// управление состоянием
+yarn add zustand;
+
+// таблицы, и работа с запросами + кэш + сортировка
+yarn add @tanstack/react-query
+yarn add @tanstack/react-table @tanstack/match-sorter-utils
+
+// формы
+yarn add react-hook-form
+
+// валидация
+yarn add zod
+
+// уведомления
+yarn add react-hot-toast
+
+// для улучшения качества кода
+yarn add -D eslint prettier eslint-config-next eslint-config-prettier
