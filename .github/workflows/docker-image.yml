@@ -1,0 +1,22 @@
+name: Docker build CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Create .env file from secret
+      run: echo "${{ secrets.backend-env }}" > .env
+      
+    - name: Build and run backend
+      run: docker compose -f docker-compose-build.yml up -d --build
