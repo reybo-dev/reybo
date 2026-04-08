@@ -58,9 +58,7 @@ public class SecurityConfiguration {
                         .pathMatchers(
                                 "/auth/**",
                                 "/login/**",
-                                "/oauth2/**",
-                                "/realms/**",
-                                "/resources/**"
+                                "/oauth2/**"
                         ).permitAll()
                         .pathMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .pathMatchers("/api/v1/**").hasAnyRole("ADMIN", "USER")

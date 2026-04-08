@@ -22,7 +22,7 @@ WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar account.jar
 
 # Порт приложения (используйте тот, который указан в application.properties)
-EXPOSE 8765
+EXPOSE 8088
 
 # Запуск приложения
 ENTRYPOINT ["java", "-jar", "account.jar"]

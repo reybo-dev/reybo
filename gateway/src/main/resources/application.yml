@@ -13,20 +13,16 @@ spring:
               - email
               - offline_access
             authorization-grant-type: authorization_code
-            redirect-uri: "http://localhost:8765/login/oauth2/code/gateway"
+            redirect-uri: "https://api.reybo.ru/login/oauth2/code/gateway"
 
         provider:
           keycloak:
-            issuer-uri: http://keycloak:8080/realms/shop
-            authorization-uri: http://localhost:8765/realms/shop/protocol/openid-connect/auth
-            token-uri: http://keycloak:8080/realms/shop/protocol/openid-connect/token
-            jwk-set-uri: http://keycloak:8080/realms/shop/protocol/openid-connect/certs
+            issuer-uri: https://auth.reybo.ru/realms/shop
             user-name-attribute: preferred_username
 
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak:8080/realms/shop
-          jwk-set-uri: http://keycloak:8080/realms/shop/protocol/openid-connect/certs
+          issuer-uri: https://auth.reybo.ru/realms/shop
 
   cloud:
     gateway:
