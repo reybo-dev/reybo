@@ -10,7 +10,7 @@ jobs:
 
   build:
 
-    environment: backend_env
+    environment: backend-env
     runs-on: self-hosted
 
     steps:
