@@ -17,12 +17,12 @@ spring:
 
         provider:
           keycloak:
-            issuer-uri: https://auth.reybo.ru/realms/shop
+            issuer-uri: https://auth.reybo.ru/auth/realms/shop
             user-name-attribute: preferred_username
 
       resourceserver:
         jwt:
-          issuer-uri: https://auth.reybo.ru/realms/shop
+          issuer-uri: https://auth.reybo.ru/auth/realms/shop
 
   cloud:
     gateway:
