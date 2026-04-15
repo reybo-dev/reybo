@@ -104,6 +104,8 @@ services:
       # ========= Настройка JAVA ===========
       JAVA_OPTS_KC_HEAP: "-XX:MaxRAMPercentage=70"
       # OLD KEYCLOAK PART
+      PROXY_ADDRESS_FORWARDING: "true"
+      KEYCLOAK_HOSTNAME: auth.reybo.ru
       KEYCLOAK_USER: ${KEYCLOAK_ADMIN_USERNAME}
       KEYCLOAK_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
       DB_VENDOR: postgres
