@@ -72,33 +72,39 @@ services:
   # =================== KEYCLOAK ===================
   keycloak:
     container_name: keycloak
-    image: quay.io/keycloak/keycloak:15.1.1
+    image: quay.io/keycloak/keycloak:26.4.1
 
+    command: start-dev
+    #    command: start --optimized для продакшн
     environment:
-      KEYCLOAK_LOGLEVEL: DEBUG
+      KC_LOG_LEVEL: DEBUG
 
-      DB_VENDOR: postgres
-      DB_ADDR: postgres
-      DB_PORT: 5432
-      DB_DATABASE: ${KEYCLOAK_DB_TITLE}
-      DB_USER: ${KEYCLOAK_DB_USERNAME}
-      DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
-
-      # Hostname & Proxy
-      KEYCLOAK_HOSTNAME: auth.reybo.ru
-      KEYCLOAK_PORT: 8080
-      PROXY_ADDRESS_FORWARDING: "true"
-      KEYCLOAK_FRONTEND_URL: https://auth.reybo.ru/auth
-
-      # Admin
-      KEYCLOAK_USER: ${KEYCLOAK_ADMIN_USERNAME}
-      KEYCLOAK_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
-
-      # Java opts
-      JAVA_OPTS: "-Xms512m -Xmx768m -XX:MaxRAMPercentage=70"
-
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/${KEYCLOAK_DB_TITLE}
+      KC_DB_USERNAME: ${KEYCLOAK_DB_USERNAME}
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+      KC_HOSTNAME: auth.reybo.ru
+      KC_HOSTNAME_PORT: 8080
+      KC_PROXY: edge
+      KC_PROXY_HEADERS: xforwarded
+      KC_HOSTNAME_STRICT: "true"
+      KC_HTTP_PORT: 8080
+      KC_HTTP_ENABLED: "true"
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USERNAME}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      # ========= Настройка пулов ===========
+      KC_DB_POOL_INITIAL_SIZE: "5"
+      KC_DB_POOL_MIN_SIZE: "5"
+      KC_DB_POOL_MAX_SIZE: "10"
+      # ========= Настройка JAVA ===========
+      JAVA_OPTS_KC_HEAP: "-XX:MaxRAMPercentage=70"
     ports:
       - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "1"
     networks:
       - keycloak-net
   # =================== /KEYCLOAK ===================
