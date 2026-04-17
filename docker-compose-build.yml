@@ -87,6 +87,8 @@ services:
       KC_HTTP_ENABLED: "true"
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USERNAME}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_PROXY: edge
+      KC_PROXY_HEADERS: xforwarded
       # ========= Настройка пулов ===========
       KC_DB_POOL_INITIAL_SIZE: "5"
       KC_DB_POOL_MIN_SIZE: "5"
