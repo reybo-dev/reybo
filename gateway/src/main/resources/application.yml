@@ -29,18 +29,6 @@ spring:
       server:
         webflux:
           routes:
-            - id: keycloak-proxy
-              uri: http://keycloak:8080
-              predicates:
-                - Path=/realms/**, /resources/**
-
-            - id: keycloak-resources
-              uri: http://keycloak:8080
-              predicates:
-                - Path=/resources/**
-              filters:
-                - StripPrefix=0
-
             - id: shop-service
               uri: lb://shop
               predicates:
@@ -59,6 +47,20 @@ spring:
               uri: lb://account
               predicates:
                 - Path=/api/v1/account/**
+              filters:
+                - TokenRelay=
+
+            - id: frontend-shop
+              uri: lb://frontend-shop
+              predicates:
+                - Path=/api/v1/frontend-shop/**
+              filters:
+                - TokenRelay=
+
+            - id: frontend-crm
+              uri: lb://frontend-crm
+              predicates:
+                - Path=/api/v1/frontend-crm/**
               filters:
                 - TokenRelay=
 

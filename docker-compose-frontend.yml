@@ -1,0 +1,23 @@
+services:
+  frontend-crm:
+    container_name: frontend-crm
+    build:
+      context: .
+      dockerfile: frontend-crm/Dockerfile
+    ports:
+      - "8081:8081"
+    networks:
+      - microservices-net
+
+  frontend-shop:
+    container_name: frontend-shop
+    build:
+      context: .
+      dockerfile: frontend-shop/Dockerfile
+    ports:
+      - "8082:8082"
+    networks:
+      - microservices-net
+
+networks:
+  microservices-net:
