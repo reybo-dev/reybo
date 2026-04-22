@@ -17,7 +17,7 @@ spring:
 
         provider:
           keycloak:
-            issuer-uri: https://auth.reybo.ru/realms/shop
+            issuer-uri: http://keycloak:8080/realms/shop
             user-name-attribute: preferred_username
 
       resourceserver:
