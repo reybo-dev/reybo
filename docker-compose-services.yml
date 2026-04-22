@@ -1,37 +1,6 @@
 include:
   - docker-compose-infrastructure.yml
 services:
-#  # ============ACCOUNT==========
-#  account:
-#    build:
-#      context: .
-#      dockerfile: account/Dockerfile
-#    container_name: account
-#    ports:
-#      - "8088:8088"
-#    environment:
-#      # Spring Boot
-#      SPRING_PROFILES_ACTIVE: prod
-#      SERVER_PORT: 8088
-#
-#      # Eureka
-#      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka:8761/eureka/
-#      EUREKA_CLIENT_REGISTER_WITH_EUREKA: true
-#      EUREKA_CLIENT_FETCH_REGISTRY: true
-#
-#      # PostgresSQL (Account DB)
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/account_db
-#      SPRING_DATASOURCE_USERNAME: postgres
-#      SPRING_DATASOURCE_PASSWORD: postgres
-#
-#      # Kafka
-#      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka-broker:9092
-#
-#      # Redis
-#      SPRING_DATA_REDIS_HOST: redis
-#      SPRING_DATA_REDIS_PORT: 6379
-#    networks:
-#      - microservices-net
 
   redis:
     image: redis:7.0.12
@@ -71,6 +40,8 @@ services:
       - microservices-net
       - keycloak-net
       - frontend-net
+  # ============/GATEWAY===============
+
   # =================== KEYCLOAK ===================
   keycloak:
     container_name: keycloak
@@ -82,7 +53,7 @@ services:
       KC_DB_USERNAME: ${KEYCLOAK_DB_USERNAME}
       KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
 
-      KC_HOSTNAME: auth.reybo.ru
+      KC_HOSTNAME: https://auth.reybo.ru
       KC_HOSTNAME_STRICT: false
       KC_HOSTNAME_BACKCHANNEL_DYNAMIC: true
       KC_HTTP_ENABLED: true
@@ -117,6 +88,7 @@ services:
 
     # =================== /KEYCLOAK ===================
 
+  # =================== FRONTEND ===================
   frontend-crm:
     container_name: frontend-crm
     build:
@@ -136,6 +108,7 @@ services:
       - "8084:3000"
     networks:
       - frontend-net
+  # =================== /FRONTEND ===================
 
 #  # ============SHOP===============
 #  shop:
@@ -185,6 +158,38 @@ services:
 #    depends_on:
 #      - eureka
 #      - postgres
+#    networks:
+#      - microservices-net
+
+#  # ============ACCOUNT==========
+#  account:
+#    build:
+#      context: .
+#      dockerfile: account/Dockerfile
+#    container_name: account
+#    ports:
+#      - "8088:8088"
+#    environment:
+#      # Spring Boot
+#      SPRING_PROFILES_ACTIVE: prod
+#      SERVER_PORT: 8088
+#
+#      # Eureka
+#      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka:8761/eureka/
+#      EUREKA_CLIENT_REGISTER_WITH_EUREKA: true
+#      EUREKA_CLIENT_FETCH_REGISTRY: true
+#
+#      # PostgresSQL (Account DB)
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/account_db
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: postgres
+#
+#      # Kafka
+#      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka-broker:9092
+#
+#      # Redis
+#      SPRING_DATA_REDIS_HOST: redis
+#      SPRING_DATA_REDIS_PORT: 6379
 #    networks:
 #      - microservices-net
 
