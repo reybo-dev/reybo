@@ -71,6 +71,13 @@ server:
   error:
     include-message: always
     include-binding-errors: always
+  servlet:
+    session:
+      cookie:
+        domain: .reybo.ru
+        name: SESSION
+        http-only: true
+        secure: true
 
 logging:
   level:
