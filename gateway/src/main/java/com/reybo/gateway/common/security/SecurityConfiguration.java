@@ -26,6 +26,11 @@ public class SecurityConfiguration {
                         .successHandler((request, response, authentication) -> {
                             response.sendRedirect("https://reybo.ru");
                         })
+                        .failureHandler((request, response, exception) -> {
+                            System.err.println("=== OAuth2 FAILURE ===");
+                            exception.printStackTrace();
+                            response.sendRedirect("/login?error");
+                        })
                 )
 
                 .oauth2ResourceServer(oauth2 -> oauth2
