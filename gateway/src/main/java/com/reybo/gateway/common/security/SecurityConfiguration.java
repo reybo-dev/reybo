@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.RedirectServerAuthenticationSuccessHandler;
+import org.springframework.security.web.server.context.WebSessionServerSecurityContextRepository;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -18,6 +19,8 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable())
 
+                .securityContextRepository(new WebSessionServerSecurityContextRepository())
+
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers("/error", "/actuator/health").permitAll()
                         .pathMatchers("/manager.html").hasRole("MANAGER")
@@ -27,7 +30,6 @@ public class SecurityConfiguration {
                 .oauth2Login(oauth2 -> oauth2
                         .authenticationSuccessHandler(new RedirectServerAuthenticationSuccessHandler("https://reybo.ru"))
                 )
-                
 
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults())
