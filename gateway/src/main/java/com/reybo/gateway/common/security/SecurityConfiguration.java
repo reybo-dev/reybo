@@ -10,6 +10,9 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -21,6 +24,8 @@ import java.util.Map;
 @EnableWebFluxSecurity
 public class SecurityConfiguration {
 
+    private static final Logger log = LoggerFactory.getLogger(SecurityConfiguration.class);
+
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http
@@ -29,14 +34,28 @@ public class SecurityConfiguration {
 
                 .oauth2Login(oauth2 -> oauth2
                         .authenticationSuccessHandler((webFilterExchange, authentication) -> {
-                            // После успешного логина редиректим на главную
+                            log.info("=== OAuth2 Login Success ===");
+                            log.info("Authentication: {}", authentication);
+
                             webFilterExchange.getExchange().getResponse().setStatusCode(
                                     org.springframework.http.HttpStatus.FOUND
                             );
                             webFilterExchange.getExchange().getResponse().getHeaders().setLocation(
                                     URI.create("/")
                             );
-                            return webFilterExchange.getChain().filter(webFilterExchange.getExchange());
+                            return Mono.empty();
+                        })
+                        .authenticationFailureHandler((webFilterExchange, exception) -> {
+                            log.error("=== OAuth2 Login Failed ===");
+                            log.error("Error: {}", exception.getMessage());
+
+                            webFilterExchange.getExchange().getResponse().setStatusCode(
+                                    org.springframework.http.HttpStatus.FOUND
+                            );
+                            webFilterExchange.getExchange().getResponse().getHeaders().setLocation(
+                                    URI.create("/login?error")
+                            );
+                            return Mono.empty();
                         })
                 )
 
@@ -44,11 +63,11 @@ public class SecurityConfiguration {
                         .jwt(jwt -> jwt
                                 .jwtAuthenticationConverter(
                                         new ReactiveJwtAuthenticationConverterAdapter(jwtMono -> {
-
-                                                    return new JwtAuthenticationToken(
-                                                            jwtMono,
-                                                            extractRoles(jwtMono)
-                                                    );
+                                            log.debug("JWT Authentication: {}", jwtMono.getClaimAsString("preferred_username"));
+                                            return new JwtAuthenticationToken(
+                                                    jwtMono,
+                                                    extractRoles(jwtMono)
+                                            );
                                         })
                                 )
                         )
