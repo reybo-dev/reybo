@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.oauth2.client.web.server.WebSessionOAuth2ServerAuthorizationRequestRepository;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.RedirectServerAuthenticationSuccessHandler;
 import org.springframework.security.web.server.context.WebSessionServerSecurityContextRepository;
@@ -28,6 +29,7 @@ public class SecurityConfiguration {
                 )
 
                 .oauth2Login(oauth2 -> oauth2
+                        .authorizationRequestRepository(new WebSessionOAuth2ServerAuthorizationRequestRepository())
                         .authenticationSuccessHandler(new RedirectServerAuthenticationSuccessHandler("https://reybo.ru"))
                 )
 
