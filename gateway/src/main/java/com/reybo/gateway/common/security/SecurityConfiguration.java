@@ -3,27 +3,34 @@ package com.reybo.gateway.common.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebFluxSecurity
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) {
+        return http
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.disable())
 
-        http
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/error").permitAll()
-                        .requestMatchers("/manager.html").hasRole("MANAGER")
-                        .anyRequest().authenticated()
+                .authorizeExchange(exchanges -> exchanges
+                        .pathMatchers("/error", "/actuator/health").permitAll()
+                        .pathMatchers("/manager.html").hasRole("MANAGER")
+                        .anyExchange().authenticated()
                 )
-                .oauth2ResourceServer((oauth2) -> oauth2
+
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/oauth2/authorization/gateway")
+                )
+
+                .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults())
                 )
-                .oauth2Login(Customizer.withDefaults());
-        return http.build();
+
+                .build();
     }
 }
