@@ -2,8 +2,6 @@ package com.reybo.gateway.common.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,10 +12,8 @@ import org.springframework.security.oauth2.server.resource.authentication.Reacti
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
+import org.springframework.security.web.server.authentication.RedirectServerAuthenticationSuccessHandler;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -36,28 +32,7 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.disable())
 
                 .oauth2Login(oauth2 -> oauth2
-                        .authenticationSuccessHandler((webFilterExchange, authentication) -> {
-                            log.info("Login SUCCESS, redirecting to https://reybo.ru");
-
-                            ServerWebExchange exchange = webFilterExchange.getExchange();
-                            ServerHttpResponse response = exchange.getResponse();
-
-                            response.setStatusCode(HttpStatus.FOUND);
-                            response.getHeaders().setLocation(URI.create("https://reybo.ru"));
-
-                            return Mono.empty();
-                        })
-                        .authenticationFailureHandler((webFilterExchange, exception) -> {
-                            log.error("Login FAILED: {}", exception.getMessage());
-
-                            ServerWebExchange exchange = webFilterExchange.getExchange();
-                            ServerHttpResponse response = exchange.getResponse();
-
-                            response.setStatusCode(HttpStatus.FOUND);
-                            response.getHeaders().setLocation(URI.create("/login?error"));
-
-                            return Mono.empty();
-                        })
+                        .authenticationSuccessHandler(new RedirectServerAuthenticationSuccessHandler("/"))
                 )
 
                 .oauth2ResourceServer(oauth2 -> oauth2
