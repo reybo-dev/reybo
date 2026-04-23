@@ -12,8 +12,9 @@ import org.springframework.security.oauth2.server.resource.authentication.Reacti
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.web.server.authentication.RedirectServerAuthenticationSuccessHandler;
+import reactor.core.publisher.Mono;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -32,21 +33,54 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.disable())
 
                 .oauth2Login(oauth2 -> oauth2
-                        .authenticationSuccessHandler(new RedirectServerAuthenticationSuccessHandler("/"))
+                        .authenticationSuccessHandler((webFilterExchange, authentication) -> {
+                            log.info("=== OAuth2 Login Success ===");
+                            log.info("Authentication: {}", authentication);
+
+                            webFilterExchange.getExchange().getResponse().setStatusCode(
+                                    org.springframework.http.HttpStatus.FOUND
+                            );
+                            webFilterExchange.getExchange().getResponse().getHeaders().setLocation(
+                                    URI.create("/")
+                            );
+                            return Mono.empty();
+                        })
+                        .authenticationFailureHandler((webFilterExchange, exception) -> {
+                            log.error("=== OAuth2 Login Failed ===");
+                            log.error("Error: {}", exception.getMessage());
+
+                            webFilterExchange.getExchange().getResponse().setStatusCode(
+                                    org.springframework.http.HttpStatus.FOUND
+                            );
+                            webFilterExchange.getExchange().getResponse().getHeaders().setLocation(
+                                    URI.create("/login?error")
+                            );
+                            return Mono.empty();
+                        })
                 )
 
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt
                                 .jwtAuthenticationConverter(
-                                        new ReactiveJwtAuthenticationConverterAdapter(jwtMono ->
-                                                new JwtAuthenticationToken(jwtMono, extractRoles(jwtMono))
-                                        )
+                                        new ReactiveJwtAuthenticationConverterAdapter(jwtMono -> {
+                                            log.debug("JWT Authentication: {}", jwtMono.getClaimAsString("preferred_username"));
+                                            return new JwtAuthenticationToken(
+                                                    jwtMono,
+                                                    extractRoles(jwtMono)
+                                            );
+                                        })
                                 )
                         )
                 )
 
                 .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers("/auth/**", "/login/**", "/oauth2/**").permitAll()
+                        .pathMatchers(
+                                "/auth/**",
+                                "/login/**",
+                                "/oauth2/**"
+                        ).permitAll()
+                        .pathMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                        .pathMatchers("/api/v1/**").hasAnyRole("ADMIN", "USER")
                         .anyExchange().authenticated()
                 )
 
