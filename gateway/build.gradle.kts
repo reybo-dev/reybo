@@ -30,7 +30,7 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 
     // W E B F L U X
-	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	implementation("org.springframework.boot:spring-boot-starter-web")
 
     // SPRING CLOUD
 	implementation("org.springframework.cloud:spring-cloud-starter-gateway")
@@ -42,7 +42,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 
     // STORAGE FOR SESSION
-    implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
 }
 
 dependencyManagement {
