@@ -26,36 +26,19 @@ spring:
 
   cloud:
     gateway:
-      server:
-        webflux:
-          routes:
-            - id: frontend-crm
-              uri: http://frontend-crm:3000
-              predicates:
-                - Host=crm.reybo.ru
-              filters:
-                - TokenRelay=
-
-#            - id: api-crm
-#              uri: lb://api-crm
-#              predicates:
-#                - Host=api.crm.reybo.ru
-#              filters:
-#                - TokenRelay=
-
-            - id: frontend-shop
-              uri: http://frontend-shop:3000
-              predicates:
-                - Host=reybo.ru
-              filters:
-                - TokenRelay=
-
-#            - id: api-shop
-#              uri: lb://api-shop
-#              predicates:
-#                - Host=api.shop.reybo.ru
-#              filters:
-#                - TokenRelay=
+      routes:
+        - id: frontend-crm
+          uri: http://frontend-crm:3000
+          predicates:
+            - Host=crm.reybo.ru
+          filters:
+            - TokenRelay=
+        - id: frontend-shop
+          uri: http://frontend-shop:3000
+          predicates:
+            - Host=reybo.ru
+          filters:
+            - TokenRelay=
 
 eureka:
   client:

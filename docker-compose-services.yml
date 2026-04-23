@@ -197,3 +197,4 @@ networks:
   microservices-net:
   keycloak-net:
   frontend-net:
+    driver: bridge
