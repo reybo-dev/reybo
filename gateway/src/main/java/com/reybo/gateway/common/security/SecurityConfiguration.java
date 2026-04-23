@@ -25,8 +25,9 @@ public class SecurityConfiguration {
                 )
 
                 .oauth2Login(oauth2 -> oauth2
-                        .authenticationSuccessHandler(new RedirectServerAuthenticationSuccessHandler("/"))
+                        .authenticationSuccessHandler(new RedirectServerAuthenticationSuccessHandler("https://reybo.ru"))
                 )
+                
 
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults())
