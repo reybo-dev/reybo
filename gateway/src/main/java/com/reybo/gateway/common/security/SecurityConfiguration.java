@@ -5,7 +5,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizationRequestRepository;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRepository;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -23,14 +26,13 @@ public class SecurityConfiguration {
                 )
 
                 .oauth2Login(oauth2 -> oauth2
+                        .authorizationEndpoint(authorization -> authorization
+                                .authorizationRequestRepository(authorizationRequestRepository())
+                        )
                         .successHandler((request, response, authentication) -> {
                             response.sendRedirect("https://reybo.ru");
                         })
-                        .failureHandler((request, response, exception) -> {
-                            System.err.println("=== OAuth2 FAILURE ===");
-                            exception.printStackTrace();
-                            response.sendRedirect("/login?error");
-                        })
+                        .failureHandler(new SimpleUrlAuthenticationFailureHandler("/login?error"))
                 )
 
                 .oauth2ResourceServer(oauth2 -> oauth2
@@ -39,9 +41,13 @@ public class SecurityConfiguration {
 
                 .sessionManagement(session -> session
                         .sessionFixation().migrateSession()
-                        .maximumSessions(1)
                 )
 
                 .build();
+    }
+
+    @Bean
+    public HttpSessionOAuth2AuthorizationRequestRepository authorizationRequestRepository() {
+        return new HttpSessionOAuth2AuthorizationRequestRepository();
     }
 }
