@@ -47,7 +47,7 @@ services:
   # ============POSTGRES-DB===============
   postgres:
     container_name: postgres
-    image: postgres:17.5
+    image: postgres:17.6
     ports:
       - "5432:5432"
     environment:
